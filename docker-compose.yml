@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+    service-milestone:
+        image: "registry.gitlab.com/tomps-cloud/repository-registry-priv-images/pm-tomps-svc-milestone:prod.latest"
+        container_name: "pm-tomps-svc-milestone"
+        labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.service-milestone.rule=Host(`gateway-bankindonesia.tomps.id/milestone`)"
+        - "traefik.http.middlewares.service-milestone.stripprefix.prefixes=/milestone"
+        - "traefik.http.routers.service-milestone.middlewares=service-milestone"
+        - "traefik.http.routers.service-milestone.rule=PathPrefix(`/milestone`)"
+        ports:
+        - "9000"
+        env_file:
+        - ./.docker/env/svc-milestone/production.env
+        networks:
+        - gateway-bankindonesia
+        - database-connect-net
+        
+networks:
+   gateway-bankindonesia:
+   database-connect-net:
